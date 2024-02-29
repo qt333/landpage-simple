@@ -62,14 +62,16 @@ def form_backup(name, email, message):
         msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] {email} {name}:"{message}"\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] {email} \n{name}: "{message}"')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email} \n{name}: "{message}"')
 
-def form_order(name, email, product):
+def form_order(name, email, product, message):
+    if message == '':
+        message = 'none'
     with open('orders.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] \nmail:{email} \nname:{name}:"{product}"\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email} \nname:{name}\nProduct:"{product}"\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] \nOrder from:{email}\nName:{name}\nProduct:\n"{product}"')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -147,7 +149,8 @@ def make_order(product):
         # Здесь должна быть логика аутентификации
         name = request.form['name'] 
         email = request.form['email']
-        # form_order(name, email, product)
+        message = request.form['message']
+        form_order(name, email, product, message)
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
     url = f'order_{product}.html'
