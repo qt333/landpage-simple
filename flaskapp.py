@@ -1,5 +1,5 @@
 from time import sleep
-from flask import Flask, make_response, render_template, redirect, url_for, request
+from flask import Flask, make_response, render_template, redirect, url_for, request,jsonify
 import json, requests
 from datetime import datetime, timedelta
 import os
@@ -64,14 +64,14 @@ def form_backup(name, email, message):
     
     tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email} \n{name}: "{message}"')
 
-def form_order(name, email, product, message):
+def form_order(name, email, product, payment_method, message):
     if message == '':
         message = 'none'
     with open('orders.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email} \nname:{name}\nProduct:"{product}"\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email} \nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
+    # tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -145,12 +145,15 @@ def order_sent():
 @app.route('/order/<product>', methods=['POST', 'GET'])
 @limiter.limit('20/minute')
 def make_order(product):
+
     if request.method == 'POST':
         # Здесь должна быть логика аутентификации
         name = request.form['name'] 
         email = request.form['email']
         message = request.form['message']
-        form_order(name, email, product, message)
+        payment_method = request.form['paymentMethod']
+        
+        form_order(name, email, product, payment_method, message)
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
     url = f'order_{product}.html'

@@ -414,6 +414,94 @@ button.makeorder-button:hover {
   background-color: #f76f00;;
 }
 
+/* DROPDOWN */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 1; /* Adjust the value as needed */
+}
+
+.dropdown-content {
+  display: none;
+  position: static;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* z-index: 1;  */ 
+  z-index: 1000; /* Higher than .dropdown */
+  /* bottom: 0%;
+  right: 100%; */
+  margin-bottom: 20px;
+  
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Media query for smaller screens */
+@media only screen and (max-width: 600px) {
+  .dropdown-content {
+    position: static;
+    display: none;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content a {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Styling for the dropdown button */
+.dropdown-btn {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 20px;
+  padding: 12px 20px;
+  background-color: #ffa600;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.25px;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  margin-bottom: 40px;
+}
+
+.dropdown-btn:hover {
+  background-color: #f76f00;
+}
+
+/* Media query for mobile responsiveness */
+@media screen and (max-width: 600px) {
+  .dropdown-btn {
+    width: 100%;
+  }
+
+  .dropdown-content {
+    width: 100%;
+  }
+}
 
 /* Language switch button */
 /* ukr */
@@ -1847,6 +1935,7 @@ contact
 
 .contact-form input,
 .contact-form textarea {
+  margin-top: 20px;
   color: #777;
   font-size: 14px;
   border: 1px solid #eee;

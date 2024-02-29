@@ -94,8 +94,7 @@ https://templatemo.com/tm-535-softy-pinko
             <div class="container">
                 <div class="row">
                     <div class="offset-xl-3 col-xl-6 offset-lg-2 col-lg-8 col-md-12 col-sm-12">
-                        <h1><strong>Инструкция как правильно оформить заказ:</strong></h1>
-                        
+                        <h1><strong> <br><br><br> Инструкция как правильно оформить заказ:</strong></h1>
                     </div>
                 </div>
                 <div class="row">
@@ -112,7 +111,7 @@ https://templatemo.com/tm-535-softy-pinko
                             ваш заказ (обычно раньше).* </li>
                             <li>*В случае если за это время заказ не был обработан - <br>
                             вам нужно будет <a href=""></a> связаться со мной на прямую и выслать <br>
-                            детали оплати. </li>
+                            детали оплати. <br></div> </li>
                         </ul>
                     </div>
                     <div class="container">
@@ -175,9 +174,80 @@ https://templatemo.com/tm-535-softy-pinko
                         </div>
                     </div>
                 </div>
+                
+                <fieldset class="row justify-content-center align-items-center">
+                    <div class="dropdown">
+                        <button class="dropdown-btn" id="selectedItemBtn">Выберите метод оплаты</button>
+                        <div class="dropdown-content" id="dropdownItems">
+                            <a href="#" onclick="changeSection('section0','Не выбран')">Не выбран</a>
+                            <a href="#" onclick="changeSection('section1','Monobank')">Monobank</a>
+                            <a href="#" onclick="changeSection('section2','Privat24')">Privat24</a>
+                            <a href="#" onclick="changeSection('section3','USDT TRC-20')">USDT TRC-20</a>
+                            <a href="#" onclick="changeSection('section4','Paypal')">Paypal</a>
+                        </div>
+                    </div>
+                </fieldset>
+                
+                
+                <div id="section0" class="row">
+                </div>
+                
+                <!-- <div id="section3" class="section" style="display: none;">
+                <h2>Section 3 Content</h2>
+                <p>This is the content for Section 3.</p>
+                </div> -->
+                
+                <div id="section1" class="sectiondrop" style="display: none;"> 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
+                            <strong>Монобанк</strong>
+                            <span><p id="Copymono">43553535353534345</p></span>
+
+                            <button class="copy-button" onclick="copyText('privat')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="section2" class="sectiondrop" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
+                            <strong>ПриватБанк</strong>
+                            <span><p id="Copyprivat">43553535353534345</p></span>
+
+                            <button class="copy-button" onclick="copyText('privat')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="section3" class="sectiondrop" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/power_1599962.png') }}" alt=""></i>
+                            <strong>USDT (Сеть TRC-20!)</strong>
+                            <span><p id="Copyusdt">sdfds9f8sdf0sd9fsd78sdf8sdf8sdf</p></span>
+
+                            <button class="copy-button" onclick="copyText('usdt')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="section4" class="sectiondrop" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/trophy_4056657.png') }}" alt=""></i>
+                            <strong>Paypal</strong>
+                            <span><p id="Copypaypal">3453453454553535</p></span>
     
+                            <button class="copy-button" onclick="copyText('paypal')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+                
+                
                 <!-- ***** Mini Box Start ***** -->
-                <div class="row"> 
+                <!-- <div class="row"> 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <a href="#" class="mini-box">
                             <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
@@ -223,7 +293,7 @@ https://templatemo.com/tm-535-softy-pinko
                             <button class="copy-button" onclick="copyText('paypal')">Копировать</button>
                         </a>
                     </div>
-                </div>
+                </div> -->
                 <!-- ***** Mini Box End ***** -->
             </div>
         </div>
@@ -328,9 +398,13 @@ https://templatemo.com/tm-535-softy-pinko
                                 <input name="name" type="text" class="form-control" id="name" placeholder="ФИО Плательщика" required="">
                               </fieldset>
                             </div>
+                            
+                            <!-- Hidden input field to store the button text value -->
+                            <input type="hidden" name="paymentMethod" id="selectedItemInput" value="">
+                            
                             <div class="col-lg-6 col-md-12 col-sm-12">
                               <fieldset>
-                                <input name="email" type="email" class="form-control" id="email" placeholder="e-mail адрес" required="">
+                                <input name="email" type="email" class="form-control" id="email" placeholder="e-mail адрес (или другой способ связи с вами)" required="">
                               </fieldset>
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12">
@@ -377,6 +451,22 @@ https://templatemo.com/tm-535-softy-pinko
             </div>
         </footer>
     
+    <script>
+        function changeSection(sectionId, buttonText) {
+            // Hide all sections
+            document.querySelectorAll('.sectiondrop').forEach(sectiondrop => {
+                sectiondrop.style.display = 'none';
+            });
+        
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+            // Update the button text
+            document.querySelector('.dropdown-btn').textContent = buttonText;
+            
+            document.getElementById('selectedItemInput').value = buttonText;
+
+        }   
+        </script>
 
     <script>
         function copyText(payment) {
