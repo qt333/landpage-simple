@@ -64,6 +64,13 @@ def form_backup(name, email, message):
     
     tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] {email} \n{name}: "{message}"')
 
+def form_order(name, email, product):
+    with open('orders.txt', 'a') as f:
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] \nmail:{email} \nname:{name}:"{product}"\n'+'-'*150+'\n\n'
+        f.write(msg)  
+    
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] \nOrder from:{email}\nName:{name}\nProduct:\n"{product}"')
+
 app = Flask(__name__)
 limiter = Limiter(
     get_remote_address,
@@ -114,45 +121,45 @@ def home_ua():
     # Загрузка и отображение главной страницы (landing page)
     return render_template('index_ukr.html') 
 
-@app.route('/contact', methods=['POST', 'GET'])
+@app.route('/contact', methods=['GET'])
 @limiter.limit('20/minute')
 def contact():
-    if request.method == 'POST':
-        # Здесь должна быть логика аутентификации
-        name = request.form['name']   
-
-        # name = name['name']
-        print(name)
-    # Загрузка и отображение главной страницы (landing page)
-    elif request.method == 'GET':
-        return render_template('index_message_sent.html')
-    else:
-        print("bad request")
-    # return f'welcome {user}'
     return render_template('index_message_sent.html') 
 
-@app.route('/contact_ua', methods=['POST', 'GET'])
+@app.route('/contact_ua', methods=['GET'])
 @limiter.limit('20/minute')
 def contact_ua():
-    if request.method == 'POST':
-        # Здесь должна быть логика аутентификации
-        name = request.form['name']        
-
-        print(name)
-    elif request.method == 'GET':
-        return render_template('index_message_sent_ua.html')
     # Загрузка и отображение главной страницы (landing page)
     return render_template('index_message_sent_ua.html') 
     # return f'welcome {user}'
 
-@app.route('/visit', methods=['GET','POST'])
-@limiter.limit('20/minute')  
-def visit():
-    vc=request.cookies.get('user_visit', "1")
-    resp = make_response(f"This is visit number {int(vc)}")
-    vscount=int(vc)+1
-    resp.set_cookie('user_visit',str(vscount), max_age=5*60*60, secure=True)
-    return resp
+@app.route('/order_sent', methods=['GET'])
+@limiter.limit('20/minute')
+def order_sent():
+    # Загрузка и отображение главной страницы (landing page)
+    return render_template('order_sent.html') 
+
+
+@app.route('/order/<product>', methods=['POST', 'GET'])
+@limiter.limit('20/minute')
+def make_order(product):
+    if request.method == 'POST':
+        # Здесь должна быть логика аутентификации
+        name = request.form['name'] 
+        email = request.form['email']
+        # form_order(name, email, product)
+        return redirect(url_for('order_sent'))
+    # Загрузка и отображение главной страницы (landing page)
+    url = f'order_{product}.html'
+    return render_template(url)
+# @app.route('/visit', methods=['GET','POST'])
+# @limiter.limit('20/minute')  
+# def visit():
+#     vc=request.cookies.get('user_visit', "1")
+#     resp = make_response(f"This is visit number {int(vc)}")
+#     vscount=int(vc)+1
+#     resp.set_cookie('user_visit',str(vscount), max_age=5*60*60, secure=True)
+#     return resp
 
 
 # # форма отправки сообщения
