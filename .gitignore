@@ -1,5 +1,6 @@
 *.rar
-*.txt
+orders.txt
+form_usage.txt
 *.ipynb
 venv
 *.png

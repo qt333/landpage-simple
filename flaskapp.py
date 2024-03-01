@@ -1,9 +1,12 @@
 from time import sleep
+from tokenize import group
 from flask import Flask, make_response, render_template, redirect, url_for, request,jsonify
 import json, requests
 from datetime import datetime, timedelta
 import os
 
+TOKEN = os.getenv('BOT_TOKEN')
+CHAT_ID = os.getenv('CHAT_ID')
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -13,23 +16,26 @@ from flask_limiter.util import get_remote_address
 # url_for - вспомогательна библиотека для того чтобы сделать правильный переход по ссылке в нашем случеш мы будем ссылаться на adm_panel
 # request - обработчик запросов GET/POST и дргуих 
 
-# def form_backup(name, email, message):
-#     with open('form_usage.txt', 'r') as f:
-#         counter = f.read()
-#     if counter == '':
-#         counter = 1
-#         with open('form_usage.txt', 'w') as f:
-#             f.write(f'{str(counter)}. [{time_now.strftime("%Y-%m-%d %H:%M:%S")}] email:{email} - {name} - "{message}"\n')  
-#     else:
-#         with open('form_usage.txt', 'r') as f:
-#             counter = int(f.readlines()[-1][0]) + 1
-#         with open('form_usage.txt', 'a') as f:
-#             f.write(f'{str(counter)}. [{time_now.strftime("%Y-%m-%d %H:%M:%S")}] email:{email} - {name} - "{message}"\n')
-#     return counter
 
 time_now = datetime.now() + timedelta(hours=2)
 
-def tg_sendMsg(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=643621106,
+lesson_price_usd = {
+    'individual': '20/28/33',
+    'individual_time':'30/45/60',
+    'group':125,
+    'pair':44
+    }
+
+
+
+product_price_usd = {
+    'elementary': 9,
+    'pre_inter': 11,
+    'inter': 10
+    }
+
+
+def tg_sendMsg(msg: str = "no message",TOKEN=TOKEN,chat_id=CHAT_ID,
     ps = "\n",
     *,
     sep_msg: bool = False,
@@ -71,7 +77,7 @@ def form_order(name, email, product, payment_method, message):
         msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email} \nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    # tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -104,8 +110,17 @@ def home_ru():
         print(name)
         return redirect('/contact')
 
+
     # Загрузка и отображение главной страницы (landing page)
-    return render_template('index.html') 
+    return render_template('index.html', 
+    individual_price=lesson_price_usd['individual'],
+    individual_time=lesson_price_usd['individual_time'],
+    group_price=lesson_price_usd['group'],
+    pair_price=lesson_price_usd['pair'],
+    elementary_price=product_price_usd['elementary'], #TODO add varial to order html
+    pre_inter_price=product_price_usd['pre_inter'],
+    inter_price=product_price_usd['inter']
+) 
 
 
 @app.route('/ua', methods=['GET','POST'])
