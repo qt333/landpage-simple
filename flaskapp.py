@@ -4,6 +4,11 @@ from flask import Flask, make_response, render_template, redirect, url_for, requ
 import json, requests
 from datetime import datetime, timedelta
 import os
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+import math
+
+usd_price = 0
 
 TOKEN = os.getenv('BOT_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
@@ -26,14 +31,71 @@ lesson_price_usd = {
     'pair':44
     }
 
-
-
 product_price_usd = {
     'elementary': 9,
     'pre_inter': 11,
     'inter': 10
     }
 
+product_price_uah = {
+    'elementary': math.ceil(9 * usd_price),
+    'pre_inter': math.ceil(11 * usd_price),
+    'inter': math.ceil(10 * usd_price)
+    }
+
+
+def get_usd_price():
+    
+    global usd_price, product_price_uah
+    url = "https://api.monobank.ua/bank/currency"
+    try:
+        res = requests.get(url)
+        if res.status_code == 200:
+            usd_price = res.json()[0]['rateSell']
+            product_price_uah = {
+                'elementary': math.ceil(9 * usd_price),
+                'pre_inter': math.ceil(11 * usd_price),
+                'inter': math.ceil(10 * usd_price)
+                }
+            print(product_price_uah['elementary'])
+    except Exception as e:
+        tg_sendMsg_report(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Exeption\nPashaVPS\n \
+            shozaenglish.pp.ua\n\n def get_usd_price()\n\n{e}')
+        raise e
+    
+    return usd_price
+    
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
+scheduler.start()
+
+def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=752683417,
+    ps = "\n",
+    *,
+    sep_msg: bool = False,
+):
+
+    """send message via telegram api(url)\n
+    url = (
+        f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={msg}"
+    )"""
+    # TOKEN = TOKEN
+    # chat_id = chat_id
+    _ps = ps
+    isStr = type(msg) is str
+    if isStr:
+        msg = msg + _ps
+    # if sep_msg and type(msg) == list:
+    #     for m in msg:
+    #         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={m + _ps}"
+    #         requests.get(url).json()
+    # elif not sep_msg and type(msg) != str:
+    #     msg = " \n".join([m for m in msg]) + _ps
+    url = (
+        f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={chat_id}&text={msg}"
+    )
+    requests.get(url).json()
 
 def tg_sendMsg(msg: str = "no message",TOKEN=TOKEN,chat_id=CHAT_ID,
     ps = "\n",
@@ -172,7 +234,8 @@ def make_order(product):
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
     url = f'order_{product}.html'
-    return render_template(url)
+    return render_template(url, usd_price=usd_price,
+    elementary_price_uah=product_price_uah['elementary'])
 # @app.route('/visit', methods=['GET','POST'])
 # @limiter.limit('20/minute')  
 # def visit():
@@ -203,6 +266,8 @@ def make_order(product):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
     # app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
     
     

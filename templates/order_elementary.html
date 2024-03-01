@@ -203,6 +203,8 @@ https://templatemo.com/tm-535-softy-pinko
                             <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
                             <strong>Монобанк</strong>
                             <span><p id="Copymono">43553535353534345</p></span>
+                            <p>Курс согласно Монобанк: {{usd_price}}</p>
+                            <p>Необходимо заплатить > {{elementary_price_uah}} грн.</p>
 
                             <button class="copy-button" onclick="copyText('privat')">Копировать</button>
                         </a>
@@ -215,7 +217,7 @@ https://templatemo.com/tm-535-softy-pinko
                             <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
                             <strong>ПриватБанк</strong>
                             <span><p id="Copyprivat">43553535353534345</p></span>
-
+                            <p>{{usd_price}}</p>
                             <button class="copy-button" onclick="copyText('privat')">Копировать</button>
                         </a>
                     </div>
