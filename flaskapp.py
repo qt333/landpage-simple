@@ -49,7 +49,7 @@ def get_usd_price():
     global usd_price, product_price_uah
     url = "https://api.monobank.ua/bank/currency"
     try:
-        res = requests.get(url)
+        res = requests.get(url) 
         if res.status_code == 200:
             usd_price = res.json()[0]['rateSell']
             product_price_uah = {
@@ -59,15 +59,14 @@ def get_usd_price():
                 }
             print(product_price_uah['elementary'])
     except Exception as e:
-        tg_sendMsg_report(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Exeption\nPashaVPS\n \
-            shozaenglish.pp.ua\n\n def get_usd_price()\n\n{e}')
+        tg_sendMsg_report(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Exeption\nPashaVPS\nshozaenglish.pp.ua\n\n def get_usd_price()\n\n{e}')
         raise e
     
     return usd_price
     
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
+scheduler.add_job(func=get_usd_price, trigger="interval", seconds=1)
 scheduler.start()
 
 def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=752683417,
