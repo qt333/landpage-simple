@@ -66,7 +66,7 @@ def get_usd_price():
     
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=get_usd_price, trigger="interval", seconds=1)
+scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
 scheduler.start()
 
 def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=752683417,
