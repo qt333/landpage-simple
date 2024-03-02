@@ -181,9 +181,11 @@ https://templatemo.com/tm-535-softy-pinko
                         <div class="dropdown-content" id="dropdownItems">
                             <a href="#" onclick="changeSection('section0','Не выбран')">Не выбран</a>
                             <a href="#" onclick="changeSection('section1','Monobank')">Monobank</a>
-                            <a href="#" onclick="changeSection('section2','Privat24')">Privat24</a>
-                            <a href="#" onclick="changeSection('section3','USDT TRC-20')">USDT TRC-20</a>
+                            <a href="#" onclick="changeSection('section2','Privatbank24 (USD)')">Privatbank24 (USD)</a>
+                            <a href="#" onclick="changeSection('section3','Privatbank24 (UAH)')">Privatbank24 (UAH)</a>
                             <a href="#" onclick="changeSection('section4','Paypal')">Paypal</a>
+                            <a href="#" onclick="changeSection('section5','USDT (TRC20)')">USDT (TRC20)</a>
+                            <a href="#" onclick="changeSection('section6','BinancePay (ID)')">BinancePay (ID)</a>
                         </div>
                     </div>
                 </fieldset>
@@ -200,13 +202,13 @@ https://templatemo.com/tm-535-softy-pinko
                 <div id="section1" class="sectiondrop" style="display: none;"> 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <a href="#" class="mini-box">
-                            <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
-                            <strong>Монобанк</strong>
-                            <span><p id="Copymono">43553535353534345</p></span>
-                            <p>Курс согласно Монобанк: {{usd_price}}</p>
-                            <p>Необходимо заплатить > {{elementary_price_uah}} грн.</p>
+                            <i><img src="{{ url_for('static', filename='assets/images/monobank Ukraine_logo.png') }}" alt=""></i>
+                            <strong>Monobank (UAH)</strong>
+                            <strong><p id="Copymono">4441114462643170</p></strong>
+                            <strong>Курс Монобанк: {{usd_price}}</strong>
+                            <strong>Необходимо заплатить > {{elementary_price_uah}} грн.</strong>
 
-                            <button class="copy-button" onclick="copyText('privat')">Копировать</button>
+                            <button class="copy-button" onclick="copyText('mono')">Копировать</button>
                         </a>
                     </div>
                 </div>
@@ -214,23 +216,23 @@ https://templatemo.com/tm-535-softy-pinko
                 <div id="section2" class="sectiondrop" style="display: none;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <a href="#" class="mini-box">
-                            <i><img src="{{ url_for('static', filename='assets/images/rocket_1323780.png') }}" alt=""></i>
-                            <strong>ПриватБанк</strong>
-                            <span><p id="Copyprivat">43553535353534345</p></span>
-                            <p>{{usd_price}}</p>
+                            <i><img src="{{ url_for('static', filename='assets/images/logo_Privat24.png') }}" alt=""></i>
+                            <strong>Privatbank24 (USD)</strong>
+                            <strong><p id="Copyprivat">5168745606289681</p></strong>
                             <button class="copy-button" onclick="copyText('privat')">Копировать</button>
                         </a>
                     </div>
                 </div>
-
+                
                 <div id="section3" class="sectiondrop" style="display: none;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <a href="#" class="mini-box">
-                            <i><img src="{{ url_for('static', filename='assets/images/power_1599962.png') }}" alt=""></i>
-                            <strong>USDT (Сеть TRC-20!)</strong>
-                            <span><p id="Copyusdt">sdfds9f8sdf0sd9fsd78sdf8sdf8sdf</p></span>
-
-                            <button class="copy-button" onclick="copyText('usdt')">Копировать</button>
+                            <i><img src="{{ url_for('static', filename='assets/images/logo_Privat24.png') }}" alt=""></i>
+                            <strong>Privatbank24 (UAH)</strong>
+                            <strong><p id="Copyprivatuah">4149629316486331</p></strong>
+                            <strong>Курс Монобанк: {{usd_price}}</strong>
+                            <strong>Необходимо заплатить > {{elementary_price_uah}} грн.</strong>
+                            <button class="copy-button" onclick="copyText('privatuah')">Копировать</button>
                         </a>
                     </div>
                 </div>
@@ -238,11 +240,36 @@ https://templatemo.com/tm-535-softy-pinko
                 <div id="section4" class="sectiondrop" style="display: none;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                         <a href="#" class="mini-box">
-                            <i><img src="{{ url_for('static', filename='assets/images/trophy_4056657.png') }}" alt=""></i>
-                            <strong>Paypal</strong>
-                            <span><p id="Copypaypal">3453453454553535</p></span>
-    
+                            <i><img src="{{ url_for('static', filename='assets/images/paypal.png') }}" alt=""></i>
+                            <!-- PayPal Logo<table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="#" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" border="0" alt="PayPal Logo"></a></td></tr></table>PayPal Logo -->
+                            <strong>PayPal</strong>
+                            <strong><p id="Copypaypal">kaliberda.pasha@gmail.com</p></strong>
+
                             <button class="copy-button" onclick="copyText('paypal')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="section5" class="sectiondrop" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/trc20.jpg') }}" alt=""></i>
+                            <!-- <i><img src="{{ url_for('static', filename='assets/images/trophy_4056657.png') }}" alt=""></i> -->
+                            <strong>USDT (TRC20)</strong>
+                            <strong><p id="Copyusdt" style="font-size: smaller;">TBQbJhBe1yzs5XxLQWbHFcV5bxxU7s1hoh</p></strong>
+                            <button class="copy-button" onclick="copyText('usdt')">Копировать</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="section6" class="sectiondrop" style="display: none;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <a href="#" class="mini-box">
+                            <i><img src="{{ url_for('static', filename='assets/images/binancepay.png') }}" alt=""></i>
+                            <strong>BinancePay (ID)</strong>
+                            <strong><p id="Copybinancepay">554131630</p></strong>
+    
+                            <button class="copy-button" onclick="copyText('binancepay')">Копировать</button>
                         </a>
                     </div>
                 </div>
@@ -447,7 +474,9 @@ https://templatemo.com/tm-535-softy-pinko
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <p class="copyright">Права защищены &copy; 2024 Дизайн: <a href="mailto:kaliberda.pasha@gmail.com">Павел Калиберда</a> - Разработка: <a href="mailto:kaliberda.dima@gmail.com ">Дмитрий Калиберда</a></p>
+                        <p class="copyright">Права защищены &copy; <br>
+                             2024 Дизайн: <a href="mailto:kaliberda.pasha@gmail.com">Павел Калиберда</a> <br>
+                              Разработка: <a href="https://quota.pp.ua">Дмитрий Калиберда</a></p>
                     </div>
                 </div>
             </div>
@@ -487,7 +516,7 @@ https://templatemo.com/tm-535-softy-pinko
         window.getSelection().removeAllRanges();
         
         // Optionally, provide some feedback to the user
-        alert("Text has been copied to the clipboard: " + textToCopy.innerText);
+        alert("Текст был скопирован в буфер: " + textToCopy.innerText);
     }
     </script>
     <!-- jQuery -->

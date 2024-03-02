@@ -70,6 +70,7 @@ scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
 scheduler.start()
 
 def get_location(ip_address):
+    # https://ip-api.com/docs/api:json
     req = requests.get(f'http://ip-api.com/json/{ip_address}').json()
     # print(req)
     country,city = (req["country"], req["city"])
