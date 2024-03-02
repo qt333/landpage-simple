@@ -145,10 +145,10 @@ def form_order(name, email, product, payment_method, message,ip_address):
     if message == '':
         message = 'none'
     with open('orders.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\n{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\nlocation:{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\n{country}({city})\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nLocation:{country}({city})\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
