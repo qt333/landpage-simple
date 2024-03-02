@@ -69,6 +69,12 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
 scheduler.start()
 
+def get_location(ip_address):
+    req = requests.get(f'http://ip-api.com/json/{ip_address}').json()
+    # print(req)
+    country,city = (req["country"], req["city"])
+    return country,city
+
 def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=752683417,
     ps = "\n",
     *,
@@ -124,21 +130,25 @@ def tg_sendMsg(msg: str = "no message",TOKEN=TOKEN,chat_id=CHAT_ID,
     requests.get(url).json()
 
 
-def form_backup(name, email, message):
+def form_backup(name, email, message,ip_address):
+    
+    country,city = get_location(ip_address)
+
     with open('form_usage.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] {email} {name}:"{message}"\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email} \n{name}: "{message}"')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"')
 
-def form_order(name, email, product, payment_method, message):
+def form_order(name, email, product, payment_method, message,ip_address):
+    country,city = get_location(ip_address)
     if message == '':
         message = 'none'
     with open('orders.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email} \nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\n{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\n{country}({city})\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -165,10 +175,13 @@ def home_ru():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
+        # ip_address = request.environ['REMOTE_ADDR']
+        ip_address = request.remote_addr
 
-        form_backup(name, email, message) 
+        print(ip_address)
         
-        print(name)
+        form_backup(name, email, message,ip_address) 
+        
         return redirect('/contact')
 
 
@@ -192,12 +205,23 @@ def home_ua():
         name = request.form['name']
         email = request.form['email'] 
         message = request.form['message']
-        form_backup(name, email, message) 
+        ip_address = request.remote_addr
+        print(ip_address)
         
-        print(name)
+        form_backup(name, email, message, ip_address) 
+        
+        
         return redirect('/contact_ua')
     # Загрузка и отображение главной страницы (landing page)
-    return render_template('index_ukr.html') 
+    return render_template('index_ukr.html',
+    individual_price=lesson_price_usd['individual'],
+    individual_time=lesson_price_usd['individual_time'],
+    group_price=lesson_price_usd['group'],
+    pair_price=lesson_price_usd['pair'],
+    elementary_price=product_price_usd['elementary'], #TODO add varial to order html
+    pre_inter_price=product_price_usd['pre_inter'],
+    inter_price=product_price_usd['inter']
+    ) 
 
 @app.route('/contact', methods=['GET'])
 @limiter.limit('20/minute')
@@ -228,8 +252,8 @@ def make_order(product):
         email = request.form['email']
         message = request.form['message']
         payment_method = request.form['paymentMethod']
-        
-        form_order(name, email, product, payment_method, message)
+        ip_address = request.remote_addr
+        form_order(name, email, product, payment_method, message,ip_address)
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
     url = f'order_{product}.html'
