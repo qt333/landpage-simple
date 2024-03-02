@@ -132,13 +132,13 @@ def tg_sendMsg(msg: str = "no message",TOKEN=TOKEN,chat_id=CHAT_ID,
 
 def form_backup(name, email, message,ip_address):
     
-    # country,city = get_location(ip_address)
+    country,city = get_location(ip_address)
 
     with open('form_usage.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{ip_address}\n{name}\n\n"{message}"\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    # tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"')
 
 def form_order(name, email, product, payment_method, message,ip_address):
     country,city = get_location(ip_address)
@@ -206,7 +206,7 @@ def home_ua():
         name = request.form['name']
         email = request.form['email'] 
         message = request.form['message']
-        ip_address = request.remote_addr
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
         print(ip_address)
         
         form_backup(name, email, message, ip_address) 
@@ -253,7 +253,7 @@ def make_order(product):
         email = request.form['email']
         message = request.form['message']
         payment_method = request.form['paymentMethod']
-        ip_address = request.remote_addr
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
         form_order(name, email, product, payment_method, message,ip_address)
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
