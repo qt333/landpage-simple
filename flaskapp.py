@@ -175,8 +175,9 @@ def home_ru():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-        ip_address = request.environ['REMOTE_ADDR']
+        # ip_address = request.environ['REMOTE_ADDR']
         # ip_address = request.remote_addr
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
 
         print(ip_address)
         
