@@ -540,7 +540,7 @@ a.lang-switch-button-ukr {
   border-radius: 10px;
   padding: 5px 7px;
   margin-bottom: 0px;
-  background-color: #d0ff00;
+  background-color: #d0ff0000;
   /* background-color: linear-gradient(127deg,#1115e9 91%, #ff0000 0%);  */
   /* background-image: url(../images/ukr11.jpg); */
   text-transform: uppercase;
@@ -609,7 +609,7 @@ a.lang-switch-button-ru {
   border-radius: 10px;
   padding: 6px 10px;
   margin-top: 7px;
-  background-color: #d0ff00;
+  background-color: #d0ff0000;
   /* background-color: linear-gradient(127deg,#1115e9 91%, #ff0000 0%);  */
   /* background-image: url(../images/ru1.jpg); */
   text-transform: uppercase;
