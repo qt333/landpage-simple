@@ -10,8 +10,8 @@ import math
 
 usd_price = 0
 
-TOKEN = os.getenv('BOT_TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
+# TOKEN = os.getenv('BOT_TOKEN')
+# CHAT_ID = os.getenv('CHAT_ID')
 
 
 from flask_limiter import Limiter
@@ -104,7 +104,7 @@ def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-
     )
     requests.get(url).json()
 
-def tg_sendMsg(msg: str = "no message",TOKEN=str(TOKEN),chat_id=CHAT_ID,
+def tg_sendMsg(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q',chat_id=643621106,
     ps = "\n",
     *,
     sep_msg: bool = False,
@@ -243,6 +243,12 @@ def contact_ua():
 def order_sent():
     # Загрузка и отображение главной страницы (landing page)
     return render_template('order_sent.html') 
+
+@app.route('/order_sent_ua', methods=['GET'])
+@limiter.limit('20/minute')
+def order_sent_ua():
+    # Загрузка и отображение главной страницы (landing page)
+    return render_template('order_sent_ua.html')
 
 
 @app.route('/order/<product>/', methods=['POST', 'GET'])
