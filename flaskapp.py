@@ -10,8 +10,10 @@ import math
 
 usd_price = 0
 
-TOKEN = os.getenv('BOT_TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
+# TOKEN = os.getenv('BOT_TOKEN')
+# CHAT_ID = os.getenv('CHAT_ID')
+TOKEN = "7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q"
+CHAT_ID = 643621106
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -31,7 +33,7 @@ lesson_price_usd = {
     'pair':44
     }
 
-product_price_usd = {
+product_price_usd = { 
     'elementary': 9,
     'pre_inter': 11,
     'inter': 10
@@ -141,15 +143,15 @@ def form_backup(name, email, message,ip_address):
     
     tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Contact Form\n{email}\n{country}({city})\n{name}\n\n"{message}"')
 
-def form_order(name, email, product, payment_method, message,ip_address):
+def form_order(name, email, product, payment_method, payment_amount, message,ip_address):
     country,city = get_location(ip_address)
     if message == '':
         message = 'none'
     with open('orders.txt', 'a') as f:
-        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\nlocation:{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\n'+f'comment:{message}\n\n'+'-'*150+'\n\n'
+        msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\nlocation:{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\nAmount:{payment_amount}'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nLocation:{country}({city})\nName:{name}\nProduct:\n"{product}"\nComment:{message}')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nLocation:{country}({city})\nName:{name}\nProduct:\n"{product}"\nPaymentMethod:{payment_method}\nAmount:{payment_amount}\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -254,13 +256,58 @@ def make_order(product):
         email = request.form['email']
         message = request.form['message']
         payment_method = request.form['paymentMethod']
+        suffix_list = ['(USD)', 'pal']
+        suffix_list1 = ['(TRC20)', '(ID)']
+        payment_amount = 0
+
+        if payment_method.endswith(tuple(suffix_list)):
+            payment_amount = str(product_price_usd[f'{product}']) + ' USD'
+        elif payment_method.endswith(tuple(suffix_list1)):
+            payment_amount = str(product_price_usd[f'{product}']) + ' USDT'
+        elif payment_method.endswith('(UAH)'):
+            payment_amount = str(product_price_uah[f'{product}']) + ' UAH'
+
         ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-        form_order(name, email, product, payment_method, message,ip_address)
+
+        form_order(name, email, product, payment_method, payment_amount, message, ip_address)
         return redirect(url_for('order_sent'))
     # Загрузка и отображение главной страницы (landing page)
     url = f'order_{product}.html'
     return render_template(url, usd_price=usd_price,
-    elementary_price_uah=product_price_uah['elementary'])
+    product_price_uah=product_price_uah[f'{product}'],
+    product_price_usd=product_price_usd[f'{product}'])
+
+
+@app.route('/order/<product>/ua', methods=['POST', 'GET'])
+@limiter.limit('20/minute')
+def make_order_ua(product):
+
+    if request.method == 'POST':
+        # Здесь должна быть логика аутентификации
+        name = request.form['name'] 
+        email = request.form['email']
+        message = request.form['message']
+        payment_method = request.form['paymentMethod']
+
+        suffix_list = ['(USD)', 'pal']
+        suffix_list1 = ['(TRC20)', '(ID)']
+        payment_amount = 0
+
+        if payment_method.endswith(tuple(suffix_list)):
+            payment_amount = str(product_price_usd[f'{product}']) + ' USD'
+        elif payment_method.endswith(tuple(suffix_list1)):
+            payment_amount = str(product_price_usd[f'{product}']) + ' USDT'
+        elif payment_method.endswith('(UAH)'):
+            payment_amount = str(product_price_uah[f'{product}']) + ' UAH'
+        
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+        form_order(name, email, product, payment_method, payment_amount, message,ip_address)
+        return redirect(url_for('order_sent_ua'))
+    # Загрузка и отображение главной страницы (landing page)
+    url = f'order_{product}_ua.html'
+    return render_template(url, usd_price=usd_price,
+    product_price_uah=product_price_uah[f'{product}'],
+    product_price_usd=product_price_usd[f'{product}'])
 # @app.route('/visit', methods=['GET','POST'])
 # @limiter.limit('20/minute')  
 # def visit():
