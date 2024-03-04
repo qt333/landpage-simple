@@ -10,10 +10,9 @@ import math
 
 usd_price = 0
 
-# TOKEN = os.getenv('BOT_TOKEN')
-# CHAT_ID = os.getenv('CHAT_ID')
-TOKEN = "7032094699:AAFlN7PBqH6LJKR-K-YpFhnanGop9MnYv2Q"
-CHAT_ID = 643621106
+TOKEN = os.getenv('BOT_TOKEN')
+CHAT_ID = os.getenv('CHAT_ID')
+
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -105,7 +104,7 @@ def tg_sendMsg_report(msg: str = "no message",TOKEN='7032094699:AAFlN7PBqH6LJKR-
     )
     requests.get(url).json()
 
-def tg_sendMsg(msg: str = "no message",TOKEN=TOKEN,chat_id=CHAT_ID,
+def tg_sendMsg(msg: str = "no message",TOKEN=str(TOKEN),chat_id=CHAT_ID,
     ps = "\n",
     *,
     sep_msg: bool = False,
@@ -151,7 +150,7 @@ def form_order(name, email, product, payment_method, payment_amount, message,ip_
         msg = f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order \nmail:{email}\nlocation:{country}({city})\nname:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\nAmount:{payment_amount}'+f'comment:{message}\n\n'+'-'*150+'\n\n'
         f.write(msg)  
     
-    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nLocation:{country}({city})\nName:{name}\nProduct:\n"{product}"\nPaymentMethod:{payment_method}\nAmount:{payment_amount}\nComment:{message}')
+    tg_sendMsg(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Order\nEmail:{email}\nLocation:{country}({city})\nName:{name}\nProduct:"{product}"\nPaymentMethod:{payment_method}\nAmount:{payment_amount}\nComment:{message}')
 
 app = Flask(__name__)
 limiter = Limiter(
