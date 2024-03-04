@@ -34,14 +34,14 @@ lesson_price_usd = {
 
 product_price_usd = { 
     'elementary': 9,
-    'pre_inter': 11,
-    'inter': 10
+    'pre_intermediate': 11,
+    'intermediate': 10
     }
 
 product_price_uah = {
     'elementary': math.ceil(9 * usd_price),
-    'pre_inter': math.ceil(11 * usd_price),
-    'inter': math.ceil(10 * usd_price)
+    'pre_intermediate': math.ceil(11 * usd_price),
+    'intermediate': math.ceil(10 * usd_price)
     }
 
 
@@ -55,8 +55,8 @@ def get_usd_price():
             usd_price = res.json()[0]['rateSell']
             product_price_uah = {
                 'elementary': math.ceil(9 * usd_price),
-                'pre_inter': math.ceil(11 * usd_price),
-                'inter': math.ceil(10 * usd_price)
+                'pre_intermediate': math.ceil(11 * usd_price),
+                'intermediate': math.ceil(10 * usd_price)
                 }
             print(product_price_uah['elementary'])
     except Exception as e:
@@ -195,8 +195,8 @@ def home_ru():
     group_price=lesson_price_usd['group'],
     pair_price=lesson_price_usd['pair'],
     elementary_price=product_price_usd['elementary'], #TODO add varial to order html
-    pre_inter_price=product_price_usd['pre_inter'],
-    inter_price=product_price_usd['inter']
+    pre_inter_price=product_price_usd['pre_intermediate'],
+    inter_price=product_price_usd['intermediate']
 ) 
 
 
@@ -222,8 +222,8 @@ def home_ua():
     group_price=lesson_price_usd['group'],
     pair_price=lesson_price_usd['pair'],
     elementary_price=product_price_usd['elementary'], #TODO add varial to order html
-    pre_inter_price=product_price_usd['pre_inter'],
-    inter_price=product_price_usd['inter']
+    pre_inter_price=product_price_usd['pre_intermediate'],
+    inter_price=product_price_usd['intermediate']
     ) 
 
 @app.route('/contact', methods=['GET'])
@@ -245,7 +245,7 @@ def order_sent():
     return render_template('order_sent.html') 
 
 
-@app.route('/order/<product>', methods=['POST', 'GET'])
+@app.route('/order/<product>/', methods=['POST', 'GET'])
 @limiter.limit('20/minute')
 def make_order(product):
 
@@ -306,7 +306,8 @@ def make_order_ua(product):
     url = f'order_{product}_ua.html'
     return render_template(url, usd_price=usd_price,
     product_price_uah=product_price_uah[f'{product}'],
-    product_price_usd=product_price_usd[f'{product}'])
+    product_price_usd=product_price_usd[f'{product}'],
+    )
 # @app.route('/visit', methods=['GET','POST'])
 # @limiter.limit('20/minute')  
 # def visit():
