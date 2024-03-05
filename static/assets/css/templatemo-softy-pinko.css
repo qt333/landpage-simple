@@ -1001,7 +1001,7 @@ welcome
 
 @media (max-width: 765px) {
   .welcome-area {
-    margin-bottom: 100px;
+    margin-bottom: 30px;
   }
   .welcome-area .header-text {
     top: 50% !important;
@@ -1013,7 +1013,7 @@ welcome
   }
   .welcome-area .header-text h1 {
     font-weight: 600;
-    font-size: 24px !important;
+    font-size: 30px !important;
     line-height: 30px !important;
     margin-bottom: 30px !important;
   }
@@ -1029,6 +1029,79 @@ welcome
   }
 }
 
+/* test media */
+
+@media (max-width: 391px) {
+  .welcome-area {
+    margin-bottom: 30px !important;
+  }
+  .welcome-area .header-text {
+    top: 45% !important;
+    transform: perspective(1px) translateY(-50%) !important;
+    text-align: center;
+    margin-top: 50px !important;
+  }
+  .welcome-area .header-text .buttons {
+    display: none;
+  }
+  .welcome-area .header-text h1 {
+    font-weight: 600;
+    font-size: 25px !important;
+    line-height: 30px !important;
+    margin-bottom: 30px !important;
+    margin-top: 0px !important;
+  }
+  .welcome-area .header-text h1 span {
+    color: #fff;
+  }
+  .welcome-area .header-text p {
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 40px;
+  }
+  .welcome-area .header-text .row {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 376px) {
+  .welcome-area {
+    margin-bottom: 30px;
+    
+  }
+  .welcome-area .header-text {
+    top: 43% !important;
+    transform: perspective(1px) translateY(-50%) !important;
+    text-align: center;
+    
+  }
+  .welcome-area .header-text .buttons {
+    display: none;
+  }
+  .welcome-area .header-text h1 {
+    margin-top: 0px;
+    font-weight: 600;
+    font-size: 24px !important;
+    line-height: 30px !important;
+    margin-bottom: 30px !important;
+  }
+  .welcome-area .header-text h1 span {
+    color: #fff;
+  }
+  .welcome-area .header-text p {
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 40px;
+  }
+  .welcome-area .header-text .row {
+    margin-top: 0px;
+    font-size: 12px !important;
+  }
+}
 
 /* 
 ---------------------------------------------
