@@ -70,6 +70,12 @@ ul, li {
   list-style: none;
 }
 
+/* payment instruction list */
+.list-instruction {
+  text-indent: -1em; /* Adjust the value based on your design */
+  padding-left: 1em; /* Same as or slightly larger than text-indent for the first line */
+}
+
 header, nav, section, article, aside, footer, hgroup {
   display: block;
 }
