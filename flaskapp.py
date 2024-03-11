@@ -8,7 +8,49 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 import math
 
-usd_price = 0
+
+#GET USD RATE INITIAL ATTEMP
+url = "https://api.monobank.ua/bank/currency"
+try:
+    res = requests.get(url) 
+    if res.status_code == 200:
+        print('MonoRate')
+        usd_price_intial = res.json()[0]['rateSell']
+        product_price_uah = {
+            'elementary': math.ceil(9 * usd_price_intial),
+            'pre_intermediate': math.ceil(11 * usd_price_intial),
+            'intermediate': math.ceil(10 * usd_price_intial)
+            }
+        # print(product_price_uah['elementary'])
+        print(f'INITIAL PRICE: {usd_price_intial}')
+        bank = 'Монобанк'
+    else:
+        print('Privat24 Rate')
+        url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
+        try:
+            res = requests.get(url) 
+            if res.status_code == 200:
+                usd_price_intial = float(res.json()[0]['sale'])
+                product_price_uah = {
+                    'elementary': math.ceil(9 * usd_price_intial),
+                    'pre_intermediate': math.ceil(11 * usd_price_intial),
+                    'intermediate': math.ceil(10 * usd_price_intial)
+                    }
+                # print(product_price_uah['elementary'])
+                print(f'INITIAL PRICE: {usd_price_intial}')
+                bank = 'Приват24'
+            else:
+                usd_price_intial = 39.75
+        except Exception as e:
+            raise e
+except Exception as e:
+    raise e
+
+
+
+
+usd_price = usd_price_intial
+
 
 # TOKEN = os.getenv('BOT_TOKEN')
 # CHAT_ID = os.getenv('CHAT_ID')
@@ -47,7 +89,7 @@ product_price_uah = {
 
 def get_usd_price():
     
-    global usd_price, product_price_uah
+    global usd_price, product_price_uah, bank
     url = "https://api.monobank.ua/bank/currency"
     try:
         res = requests.get(url) 
@@ -59,12 +101,34 @@ def get_usd_price():
                 'intermediate': math.ceil(10 * usd_price)
                 }
             print(product_price_uah['elementary'])
+            print(usd_price)
+            bank = 'Монобанк'
+            return usd_price
     except Exception as e:
         tg_sendMsg_report(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Exeption\nPashaVPS\nshozaenglish.pp.ua\n\n def get_usd_price()\n\n{e}')
         raise e
     
-    return usd_price
+    url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
+    try:
+        res = requests.get(url) 
+        if res.status_code == 200:
+            usd_price = float(res.json()[0]['sale'])
+            product_price_uah = {
+                'elementary': math.ceil(9 * usd_price),
+                'pre_intermediate': math.ceil(11 * usd_price),
+                'intermediate': math.ceil(10 * usd_price)
+                }
+            print(product_price_uah['elementary'])
+            print(f'INITIAL PRICE: {usd_price}')
+            bank = 'Приват24'
+        else:
+            usd_price = 39.75
+    except Exception as e:
+        tg_sendMsg_report(f'[{time_now.strftime("%Y-%m-%d %H:%M:%S")}] Exeption\nPashaVPS\nshozaenglish.pp.ua\n\n def get_usd_price(PrivatBank)\n\n{e}')
+        raise e
     
+    return usd_price
+
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=get_usd_price, trigger="interval", seconds=360)
@@ -280,7 +344,8 @@ def make_order(product):
     url = f'order_{product}.html'
     return render_template(url, usd_price=usd_price,
     product_price_uah=product_price_uah[f'{product}'],
-    product_price_usd=product_price_usd[f'{product}'])
+    product_price_usd=product_price_usd[f'{product}'],
+    bank=bank)
 
 
 @app.route('/order/<product>/ua', methods=['POST', 'GET'])
@@ -313,6 +378,7 @@ def make_order_ua(product):
     return render_template(url, usd_price=usd_price,
     product_price_uah=product_price_uah[f'{product}'],
     product_price_usd=product_price_usd[f'{product}'],
+    bank=bank
     )
 # @app.route('/visit', methods=['GET','POST'])
 # @limiter.limit('20/minute')  
