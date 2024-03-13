@@ -30,7 +30,7 @@ try:
         try:
             res = requests.get(url) 
             if res.status_code == 200:
-                usd_price_intial = float(res.json()[0]['sale'])
+                usd_price_intial = float(res.json()[1]['sale'])
                 product_price_uah = {
                     'elementary': math.ceil(9 * usd_price_intial),
                     'pre_intermediate': math.ceil(11 * usd_price_intial),
@@ -46,10 +46,27 @@ try:
 except Exception as e:
     raise e
 
-
-
-
 usd_price = usd_price_intial
+
+lesson_price_usd = {
+    'individual': '20/28/33',
+    'individual_time':'30/45/60',
+    'group':125,
+    'pair':44
+    }
+
+product_price_usd = { 
+    'elementary': 8,
+    'pre_intermediate': 9,
+    'intermediate': 10
+    }
+
+
+product_price_uah = {
+    'elementary': math.ceil(product_price_usd['elementary'] * usd_price),
+    'pre_intermediate': math.ceil(product_price_usd['pre_intermediate'] * usd_price),
+    'intermediate': math.ceil(product_price_usd['intermediate'] * usd_price)
+    }
 
 
 # TOKEN = os.getenv('BOT_TOKEN')
@@ -66,25 +83,6 @@ from flask_limiter.util import get_remote_address
 
 
 time_now = datetime.now() + timedelta(hours=2)
-
-lesson_price_usd = {
-    'individual': '20/28/33',
-    'individual_time':'30/45/60',
-    'group':125,
-    'pair':44
-    }
-
-product_price_usd = { 
-    'elementary': 9,
-    'pre_intermediate': 11,
-    'intermediate': 10
-    }
-
-product_price_uah = {
-    'elementary': math.ceil(9 * usd_price),
-    'pre_intermediate': math.ceil(11 * usd_price),
-    'intermediate': math.ceil(10 * usd_price)
-    }
 
 
 def get_usd_price():
