@@ -49,10 +49,10 @@ except Exception as e:
 usd_price = usd_price_intial
 
 lesson_price_usd = {
-    'individual': '20/28/33',
+    'individual': '35/50/60',
     'individual_time':'30/45/60',
-    'group':125,
-    'pair':44
+    'group':150,
+    'pair':75
     }
 
 product_price_usd = { 
